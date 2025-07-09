@@ -1,6 +1,7 @@
 import React from 'react';
-import { ShellBar, ShellBarItem } from '@ui5/webcomponents-react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { ShellBar } from '@ui5/webcomponents-react';
+import { Route, Routes, Link, useLocation } from 'react-router-dom';
+import './App.css'; // Pridáme vlastné štýly
 
 function Home() {
   return <h2>Domů</h2>;
@@ -14,44 +15,44 @@ function Settings() {
   return <h2>Nastavení</h2>;
 }
 
-const NavigationShellBar = () => {
-  const navigate = useNavigate();
+function App() {
   const location = useLocation();
 
   return (
-    <ShellBar
-      primaryTitle="Moje Fiori Appka"
-      logo={
-        <img
-          src="https://www.sap.com/dam/application/shared/logos/sap-logo-svg.svg"
-          alt="SAP Logo"
-          height="30"
-        />
-      }
-    >
-      <ShellBarItem
-        icon="home"
-        text={location.pathname === '/' ? '🏠 Domů' : 'Domů'}
-        onClick={() => navigate('/')}
-      />
-      <ShellBarItem
-        icon="employee"
-        text={location.pathname === '/profile' ? '👤 Profil' : 'Profil'}
-        onClick={() => navigate('/profile')}
-      />
-      <ShellBarItem
-        icon="settings"
-        text={location.pathname === '/settings' ? '⚙️ Nastavení' : 'Nastavení'}
-        onClick={() => navigate('/settings')}
-      />
-    </ShellBar>
-  );
-};
-
-function App() {
-  return (
     <>
-      <NavigationShellBar />
+      <ShellBar
+        primaryTitle="Moje Fiori Appka"
+        logo={
+          <img
+            src="https://www.sap.com/dam/application/shared/logos/sap-logo-svg.svg"
+            alt="SAP Logo"
+            height="30"
+          />
+        }
+      />
+
+      {/* Navigačný panel s linkami */}
+      <nav className="nav-bar">
+        <Link
+          to="/"
+          className={location.pathname === '/' ? 'nav-link active' : 'nav-link'}
+        >
+          Domů
+        </Link>
+        <Link
+          to="/profile"
+          className={location.pathname === '/profile' ? 'nav-link active' : 'nav-link'}
+        >
+          Profil
+        </Link>
+        <Link
+          to="/settings"
+          className={location.pathname === '/settings' ? 'nav-link active' : 'nav-link'}
+        >
+          Nastavení
+        </Link>
+      </nav>
+
       <main style={{ padding: '2rem' }}>
         <Routes>
           <Route path="/" element={<Home />} />
