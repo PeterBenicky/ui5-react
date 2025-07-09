@@ -1,53 +1,71 @@
 import React, { useEffect, useState } from "react";
 import {
-  ShellBar,
-  SideNavigation,
-  SideNavigationItem,
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   Button,
-} from "@ui5/webcomponents-react";
+  Box,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
+import PersonIcon from "@mui/icons-material/Person";
+import SettingsIcon from "@mui/icons-material/Settings";
+
 import { useNavigate, useLocation, Routes, Route } from "react-router-dom";
 
 function Home() {
   return (
-    <div>
-      <h2>Domů</h2>
-      <img
-        src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
-        alt="Domácí prostředí"
-        style={{ marginTop: "1rem", maxWidth: "100%", borderRadius: "8px" }}
-      />
-      <h2>Domů</h2>
-      <img
-        src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
-        alt="Domácí prostředí"
-        style={{ marginTop: "1rem", maxWidth: "100%", borderRadius: "8px" }}
-      />
-      <h2>Domů</h2>
-      <img
-        src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
-        alt="Domácí prostředí"
-        style={{ marginTop: "1rem", maxWidth: "100%", borderRadius: "8px" }}
-      />
-      <h2>Domů</h2>
-      <img
-        src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
-        alt="Domácí prostředí"
-        style={{ marginTop: "1rem", maxWidth: "100%", borderRadius: "8px" }}
-      />
-
-    </div>
+    <Box sx={{ padding: 2 }}>
+      <Typography variant="h4">Domů</Typography>
+      {[...Array(4)].map((_, i) => (
+        <img
+          key={i}
+          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
+          alt="Domácí prostředí"
+          style={{ marginTop: "1rem", maxWidth: "100%", borderRadius: 8 }}
+        />
+      ))}
+    </Box>
   );
 }
+
 function Profile() {
-  return <h2>Profil</h2>;
+  const handleClick = () => {
+    alert("Klikol si na tlačidlo!");
+  };
+
+  return (
+    <Box sx={{ padding: 2 }}>
+      <Typography variant="h4">Profil</Typography>
+      <Button variant="contained" color="primary" onClick={handleClick} sx={{ mt: 2 }}>
+        Klikni ma
+      </Button>
+    </Box>
+  );
 }
+
 function Settings() {
-  return <h2>Nastavení</h2>;
+  return (
+    <Box sx={{ padding: 2 }}>
+      <Typography variant="h4">Nastavení</Typography>
+    </Box>
+  );
 }
+
+const drawerWidth = 240;
+const collapsedWidth = 64;
 
 export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
+
   const [selectedKey, setSelectedKey] = useState(location.pathname);
   const [collapsed, setCollapsed] = useState(false);
 
@@ -55,96 +73,106 @@ export default function App() {
     setSelectedKey(location.pathname);
   }, [location.pathname]);
 
-  const onItemSelect = (event: CustomEvent) => {
-    const item = event.detail.item;
-    const key = item?.getAttribute("data-key");
-    if (key) {
-      navigate(key);
-      setSelectedKey(key);
-    }
-  };
-
   const toggleCollapse = () => {
     setCollapsed((prev) => !prev);
   };
 
+  const menuItems = [
+    { key: "/", icon: <HomeIcon />, text: "Domů" },
+    { key: "/profile", icon: <PersonIcon />, text: "Profil" },
+    { key: "/settings", icon: <SettingsIcon />, text: "Nastavení" },
+  ];
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <ShellBar
-        primaryTitle="Moje Fiori Appka"
-        logo={
+    <Box sx={{ display: "flex", height: "100vh" }}>
+      {/* AppBar */}
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            edge="start"
+            onClick={toggleCollapse}
+            sx={{ mr: 2 }}
+            aria-label={collapsed ? "Rozbaliť menu" : "Zbaliť menu"}
+          >
+            <MenuIcon />
+          </IconButton>
           <img
             src="https://www.sap.com/dam/application/shared/logos/sap-logo-svg.svg"
             alt="SAP Logo"
-            height="30"
+            height={30}
+            style={{ marginRight: 16 }}
           />
-        }
-        startButton={
-          <Button
-            icon="menu2"
-            onClick={toggleCollapse}
-            design="Transparent"
-            title={collapsed ? "Rozbaliť menu" : "Zbaliť menu"}
-            style={{ marginLeft: 0, paddingLeft: 0 }}
-          />
-        }
-        style={{ paddingLeft: 0, marginLeft: 0 }}
-      />
-  
-      <div style={{ display: "flex", flexGrow: 1, overflow: "hidden", height: "100%" }}>
-        <SideNavigation
-          style={{
-            width: collapsed ? 64 : 250,
-            minWidth: collapsed ? 64 : 250,
-            maxWidth: collapsed ? 64 : 250,            
-            transition: "width 0.3s ease",
-            height: "100%",
-            overflow: "hidden",
-            flexShrink: 0,           // nech sa sidebar nezmenší pod šírku     
-            borderRight: '1px solid #ccc',       
-          }}
-          onSelectionChange={onItemSelect}
-        >
-          <SideNavigationItem
-            icon="home"
-            text={!collapsed ? "Domů" : ""}
-            data-key="/"
-            selected={selectedKey === "/"}
-          />
-          <SideNavigationItem
-            icon="employee"
-            text={!collapsed ? "Profil" : ""}
-            data-key="/profile"
-            selected={selectedKey === "/profile"}
-          />
-          <SideNavigationItem
-            icon="settings"
-            text={!collapsed ? "Nastavení" : ""}
-            data-key="/settings"
-            selected={selectedKey === "/settings"}
-          />
-        </SideNavigation>
-  
-        <main
-          style={{
-            flexGrow: 1,
-            padding: "2rem 2rem 2rem 1rem",
-            overflowY: "auto",
-            backgroundColor: "#f5f6f7",
-            transition: "width 0.3s ease",
-            //marginLeft: collapsed ? 64 : 250,
-            height: "100%",
-            marginLeft: 0,  // odstránený marginLeft
-          }}
-        >
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/settings" element={<Settings />} />
-          </Routes>
-        </main>
-      </div>
-    </div>
+          <Typography variant="h6" noWrap component="div">
+            Moje Fiori Appka
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      {/* Drawer / Sidebar */}
+      <Drawer
+        variant="permanent"
+        open
+        sx={{
+          width: collapsed ? collapsedWidth : drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: collapsed ? collapsedWidth : drawerWidth,
+            boxSizing: "border-box",
+            transition: "width 0.3s",
+            overflowX: "hidden",
+            borderRight: "1px solid #ccc",
+          },
+        }}
+      >
+        <Toolbar />
+        <List>
+          {menuItems.map(({ key, icon, text }) => (
+            <ListItem key={key} disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                selected={selectedKey === key}
+                onClick={() => navigate(key)}
+                sx={{
+                  justifyContent: collapsed ? "center" : "flex-start",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: collapsed ? "auto" : 3,
+                    justifyContent: "center",
+                  }}
+                >
+                  {icon}
+                </ListItemIcon>
+                {!collapsed && <ListItemText primary={text} />}
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+
+      {/* Main content */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          bgcolor: "#f5f6f7",
+          p: 3,
+          overflowY: "auto",
+          marginLeft: 0,
+          transition: "margin-left 0.3s",
+          height: "100vh",
+        }}
+      >
+        <Toolbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+      </Box>
+    </Box>
   );
-  
 }
