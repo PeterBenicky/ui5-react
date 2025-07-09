@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import "@ui5/webcomponents/dist/Assets";
+import "@ui5/webcomponents-icons/dist/AllIcons";
 import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);

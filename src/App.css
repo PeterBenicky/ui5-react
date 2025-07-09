@@ -1,57 +1,52 @@
+/* Root container, ktorý zaberá celú výšku */
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  height: 100vh;
+  overflow: hidden;
 }
 
-.App-link {
-  color: #61dafb;
+/* Horný ShellBar, fixná výška */
+.App-header {
+  flex-shrink: 0;
+  height: 64px; /* alebo podľa potreby */
+  background-color: white; /* alebo iná farba */
+  border-bottom: 1px solid #ccc;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.nav-bar {
+/* Hlavný obsah pod headerom - sidebar + hlavná plocha */
+.App-main {
   display: flex;
-  gap: 1.5rem;
-  padding: 1rem 2rem;
-  background-color: #f3f4f5;
-  border-bottom: 1px solid #d0d0d0;
+  flex-grow: 1;
+  overflow: hidden;
 }
 
-.nav-link {
-  text-decoration: none;
-  font-weight: bold;
-  color: #0a6ed1;
+/* Sidebar */
+.App-sidebar {
+  transition: width 0.3s ease;
+  background-color: #fff;
+  border-right: 1px solid #ccc;
+  overflow: hidden;
 }
 
-.nav-link.active {
-  color: black;
-  text-decoration: underline;
+/* Obsah (hlavná plocha) */
+.App-content {
+  flex-grow: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background-color: #f5f6f7;
+}
+
+/* Keď je sidebar zbalený (šírka 64px), tak vybraná položka zvýrazní iba ikonu */
+.side-navigation-collapsed ui5-side-navigation-item[selected] {
+  padding-left: 0 !important;
+  width: 64px !important;
+  justify-content: center !important;
+  background-color: var(--sapList_Selected_Background) !important;
+  border-radius: 0 12px 12px 0 !important;
+}
+
+/* A text v zbalenom stave skrývame */
+.side-navigation-collapsed ui5-side-navigation-item > div > span {
+  display: none !important;
 }
